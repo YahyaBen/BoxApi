@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BoxApi.Migrations
 {
     [DbContext(typeof(ContextApi))]
-    [Migration("20211202145127_HelloWorlds-1")]
-    partial class HelloWorlds1
+    [Migration("20211202173704_AZER")]
+    partial class AZER
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -114,19 +114,27 @@ namespace BoxApi.Migrations
                     b.ToTable("OStock");
                 });
 
-            modelBuilder.Entity("CategorieOStock", b =>
+            modelBuilder.Entity("BoxApi.Models.Stock_Categories", b =>
                 {
-                    b.Property<int>("CategoriesId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("OStocksId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoriesId", "OStocksId");
+                    b.Property<int>("StockID")
+                        .HasColumnType("int");
 
-                    b.HasIndex("OStocksId");
+                    b.HasKey("Id");
 
-                    b.ToTable("CategorieOStock");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("StockID");
+
+                    b.ToTable("Stocks_Categories");
                 });
 
             modelBuilder.Entity("CommandeOStock", b =>
@@ -153,19 +161,23 @@ namespace BoxApi.Migrations
                     b.Navigation("Box");
                 });
 
-            modelBuilder.Entity("CategorieOStock", b =>
+            modelBuilder.Entity("BoxApi.Models.Stock_Categories", b =>
                 {
-                    b.HasOne("BoxApi.Models.Categorie", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
+                    b.HasOne("BoxApi.Models.Categorie", "Categorie")
+                        .WithMany("Stock_Categories")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BoxApi.Models.OStock", null)
-                        .WithMany()
-                        .HasForeignKey("OStocksId")
+                    b.HasOne("BoxApi.Models.OStock", "Stock")
+                        .WithMany("Stock_Categories")
+                        .HasForeignKey("StockID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Categorie");
+
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("CommandeOStock", b =>
@@ -181,6 +193,16 @@ namespace BoxApi.Migrations
                         .HasForeignKey("OStocksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BoxApi.Models.Categorie", b =>
+                {
+                    b.Navigation("Stock_Categories");
+                });
+
+            modelBuilder.Entity("BoxApi.Models.OStock", b =>
+                {
+                    b.Navigation("Stock_Categories");
                 });
 #pragma warning restore 612, 618
         }

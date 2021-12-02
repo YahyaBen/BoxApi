@@ -9,7 +9,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ContextApi>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ContextApiConnexion")));
-
+builder.Services.AddControllers()
+            .AddJsonOptions(o => o.JsonSerializerOptions
+                .ReferenceHandler = null);
 // Add CORS
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>

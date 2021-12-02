@@ -7,7 +7,7 @@
         public double Profendeur { get; set; }
         public double Hauteur { get; set; }
         public double Largeur { get; set; }
-        public ICollection<Categorie> Categories { get; set; }
+        public ICollection<Stock_Categories> Stock_Categories { get; set; }
         public ICollection<Commande> Commandes { get; set; }
 
     }
